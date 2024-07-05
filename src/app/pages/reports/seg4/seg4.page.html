@@ -1,0 +1,30 @@
+<app-explore-segments></app-explore-segments>
+
+<ion-content [fullscreen]="false" color="light" class="ion-padding dark:bg-gray-900">
+  <form action="">
+    <ion-item lines="none" class="bg-transparent p-0">
+      <b class="text-lg font-bold text-gray-900 dark:text-gray-300">Descripción de Daños Materiales</b>
+      <ion-button expand="block" (click)="abrirModalDanios()" >
+        <ion-icon slot="start" name="add"class="rounded-md py-2 px-4"></ion-icon>
+      </ion-button>
+    </ion-item>
+      <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div *ngIf="danos.length > 0" class="mt-4 p-4 bg-white rounded shadow-md dark:bg-gray-800">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-gray-300">Daños Registrados</h3>
+            <ul>
+              <li *ngFor="let dano of danos" class="text-gray-700 dark:text-gray-300">
+                {{ dano.zona }} - {{ dano.pieza }} - {{ dano.area }}
+              </li>
+            </ul>
+          </div>
+          <div *ngIf="danos.length === 0" class="mt-4 p-4 bg-white rounded shadow-md dark:bg-gray-800">
+            <p class="text-gray-700 dark:text-gray-300">Sin daños registrados.</p>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-button expand="full" type="submit" class="mt-4 bg-blue-600 text-white dark:bg-blue-500 dark:text-white">Guardar Daños</ion-button>
+  </form>
+</ion-content>

@@ -1,0 +1,105 @@
+<app-explore-segments></app-explore-segments>
+
+<ion-content [fullscreen]="false" color="light" class="ion-padding bg-gray-100 dark:bg-gray-800">
+  <form [formGroup]="DatosGeneralesForm" (ngSubmit)="saveData()"  class="space-y-4 bg-white p-4 rounded shadow-md dark:bg-gray-800">
+    <h2 class="font-bold text-lg text-gray-900 dark:text-gray-300">Datos Generales</h2>
+    <div class="space-y-2">
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked" class="dark:text-gray-300">Solicitante</ion-label>
+        <ion-input formControlName="autoridadSolicitante" class="dark:text-gray-300" (ionChange)="toUpperCase($event, 'autoridadSolicitante')"></ion-input>
+      </ion-item>
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked" class="dark:text-gray-300">Cargo</ion-label>
+        <ion-input formControlName="cargo" class="dark:text-gray-300" (ionChange)="toUpperCase($event, 'cargo')"></ion-input>
+      </ion-item>    
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked" class="dark:text-gray-300">Institución</ion-label>
+        <ion-input formControlName="institucion" class="dark:text-gray-300" (ionChange)="toUpperCase($event, 'institucion')"></ion-input>
+      </ion-item>
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked" class="dark:text-gray-300">Oficio</ion-label>
+        <ion-input formControlName="oficio" class="dark:text-gray-300" (ionChange)="toUpperCase($event, 'oficio')"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Fecha</ion-label>
+        <ion-datetime-button  datetime="datetime"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              formControlName="fecha"
+              presentation="date"
+              [formatOptions]="{
+                date: {
+                  weekday: 'short',
+                  month: 'long',
+                  day: '2-digit',
+                }
+              }"
+              id="datetime"
+              (ionChange)="calcularVigencia()"
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-item>
+
+      <br>
+        <ion-label position="stacked" class="dark:text-gray-300">Tipo de Oficio</ion-label>
+        <ion-list>
+          <ion-item class="bg-gray-100 dark:bg-gray-800">
+            <ion-checkbox formControlName="iprevia" justify="space-between">I.PREVIA</ion-checkbox>
+          </ion-item>
+          <ion-item class="bg-gray-100 dark:bg-gray-800">
+            <ion-checkbox formControlName="aadministrativo" justify="space-between">A.ADMINISTRATIVO</ion-checkbox>
+          </ion-item>
+          <ion-item class="bg-gray-100 dark:bg-gray-800">
+            <ion-checkbox formControlName="actourg" justify="space-between">ACTO.URG</ion-checkbox>
+          </ion-item>
+          <ion-item class="bg-gray-100 dark:bg-gray-800">
+            <ion-checkbox formControlName="ifiscal" justify="space-between">I.FISCAL</ion-checkbox>
+          </ion-item>
+          <ion-item class="bg-gray-100 dark:bg-gray-800">
+            <ion-checkbox formControlName="causaexpdte" justify="space-between">CAUSA/EXPDTE</ion-checkbox>
+          </ion-item>
+          <ion-item class="bg-gray-100 dark:bg-gray-800">
+            <ion-checkbox formControlName="ppolicial" justify="space-between">P.POLICIAL</ion-checkbox>
+          </ion-item>
+        </ion-list>
+        
+
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked" class="dark:text-gray-300">Número de Documento</ion-label>
+        <ion-input formControlName="numeroDocumento"type="number" class="dark:text-gray-300" (ionChange)="toUpperCase($event, 'numeroDocumento')"></ion-input>
+      </ion-item>
+
+
+    <h2 class="font-bold text-lg mt-6 text-gray-900 dark:text-gray-300">Funcionario(s) Responsable(s)</h2>
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked" class="dark:text-gray-300">Grado Nombres y Apellidos</ion-label>
+        <ion-input formControlName="funcionario" class="dark:text-gray-300" (ionChange)="toUpperCase($event, 'funcionario')"></ion-input>
+      </ion-item>    
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked" class="dark:text-gray-300">Área</ion-label>
+        <ion-input formControlName="areaFuncionario" class="dark:text-gray-300" (ionChange)="toUpperCase($event, 'areaFuncionario')"></ion-input>
+      </ion-item>    
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked" class="dark:text-gray-300">Especialidad</ion-label>
+        <ion-input formControlName="especialidadFuncionario" class="dark:text-gray-300" (ionChange)="toUpperCase($event, 'especialidadFuncionario')"></ion-input>
+      </ion-item>    
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked" class="dark:text-gray-300">Número</ion-label>
+        <ion-input formControlName="numero" class="dark:text-gray-300" (ionChange)="toUpperCase($event, 'numero')" type="number"></ion-input>
+      </ion-item>
+      <ion-item class="dark:bg-gray-800 dark:text-gray-300">
+        <ion-label class="dark:text-gray-300">Vigencia: </ion-label>
+        <ion-input formControlName="vigencia" readonly="true" class="dark:text-gray-300"></ion-input>
+      </ion-item>
+
+    <h2 class="font-bold text-lg mt-6 text-gray-900 dark:text-gray-300">Antecedentes</h2>
+    <ion-item class="bg-gray-100 dark:bg-gray-800">
+      <ion-textarea placeholder="La Practica de: Reconocmiento Técnico Mecánico y Avalúo de Daños Materiales, del vehiculo de placas: "
+      formControlName="antecedente" class="dark:text-gray-300 dark:bg-gray-900" (ionChange)="toUpperCase($event, 'antecedente')"></ion-textarea>
+    </ion-item>
+  </div>
+    <ion-button expand="full" type="submit" class="mt-4 bg-blue-600 text-white dark:bg-blue-500 dark:text-white">Guardar Datos</ion-button>
+  </form>
+</ion-content>

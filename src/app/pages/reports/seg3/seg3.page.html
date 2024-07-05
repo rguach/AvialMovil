@@ -1,0 +1,75 @@
+<ion-content [fullscreen]="false" color="light" class="ion-padding bg-gray-100 dark:bg-gray-900">
+  <app-explore-segments></app-explore-segments>
+
+  <form [formGroup]="IdentificacionPericialForm" (ngSubmit)="saveData()"
+    class="bg-white p-4 rounded shadow-md dark:bg-gray-800">
+    <b class="text-lg text-gray-900 dark:text-gray-300">Identificación del Objeto de Pericia</b>
+
+    <!-- Botón para tomar foto -->
+    <ion-button (click)="addPhotoToGallery(1)" class="w-full bg-blue-600 text-white dark:bg-blue-500 dark:text-white">
+      <ion-icon name="camera" class="mr-2"></ion-icon>
+    </ion-button>
+
+    <!-- Vista previa de la foto (si existe) -->
+    <ion-item size="6" (click)="removePhoto(1)" class="cursor-pointer">
+      <ion-img *ngIf="IdentificacionPericialForm.get('foto1')?.value"
+        [src]="IdentificacionPericialForm.get('foto1')?.value"
+        class="rounded-lg shadow-md dark:border-gray-700"></ion-img>
+    </ion-item>
+
+    <!-- Campo para el propietario -->
+    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
+      <ion-input formControlName="propidentificacion" label="Propietario" class="dark:text-gray-300"
+        (ionChange)="toUpperCase($event, 'propidentificacion')"></ion-input>
+    </ion-item>
+
+    <!-- Campo para la Placa Actual (readonly) -->
+    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
+      <ion-input formControlName="PlacaActual" label="Placa Actual" class="dark:text-gray-300"
+        readonly="true"></ion-input>
+    </ion-item>
+
+    <!-- Campo para el Número de Chasis -->
+    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
+      <ion-input formControlName="NumeroChasis" label="Chasis Nº" class="dark:text-gray-300"
+        (ionChange)="toUpperCase($event, 'NumeroChasis')"></ion-input>
+    </ion-item>
+
+    <!-- Campo para el Número de Motor -->
+    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
+      <ion-input formControlName="NumeroMotor" label="Motor Nº" class="dark:text-gray-300"
+        (ionChange)="toUpperCase($event, 'NumeroMotor')"></ion-input>
+    </ion-item>
+
+    <!-- Dropdown para seleccionar la Marca -->
+   <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
+      <ion-select formControlName="Marca" placeholder="Seleccionar Marca" class="dark:text-gray-300">
+        <ion-select-option *ngFor="let marca of marcas" [value]="marca.idMarca">{{marca.nombre}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    
+    <!-- Dropdown para seleccionar el Modelo -->
+    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2" *ngIf="modelos.length > 0">
+      <ion-select formControlName="Modelo" placeholder="Seleccionar Modelo" class="dark:text-gray-300">
+        <ion-select-option *ngFor="let modelo of modelos" [value]="modelo.idModelo">{{modelo.nombre}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Campo para el Tipo de Vehículo -->
+    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
+      <ion-input formControlName="TipoVehiculo" label="Tipo de Vehículo" class="dark:text-gray-300" readonly="true"></ion-input>
+    </ion-item>
+    
+    <!-- Campo para el Año -->
+    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
+      <ion-input formControlName="Anio" label="Año" class="dark:text-gray-300" readonly="true"></ion-input>
+    </ion-item>
+
+
+    <!-- Más campos según tu formulario -->
+
+    <!-- Botón para guardar datos -->
+    <ion-button expand="full" type="submit" class="mt-4 bg-blue-600 text-white dark:bg-blue-500 dark:text-white">Guardar
+      Datos</ion-button>
+  </form>
+</ion-content>

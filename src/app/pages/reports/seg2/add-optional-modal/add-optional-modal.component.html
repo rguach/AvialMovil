@@ -1,0 +1,19 @@
+<ion-header class="bg-gray-100 dark:bg-gray-800">
+  <ion-toolbar class="border-b border-gray-300 dark:border-gray-700">
+    <ion-buttons slot="start">
+      <ion-button (click)="close()" class="text-red-700 dark:text-red-400" fill="clear">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="font-semibold text-gray-700 dark:text-gray-300">{{ 'Nueva ' + selectType }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding bg-white dark:bg-gray-900">
+  <ion-item class="mb-4">
+    <ion-input [(ngModel)]="newOption" class="custom-input"></ion-input>
+  </ion-item>
+  <ion-button expand="full" (click)="addOption()" class="custom-button">
+    Agregar
+  </ion-button>
+</ion-content>

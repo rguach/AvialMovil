@@ -1,0 +1,21 @@
+<ion-header [translucent]="true" class="bg-white">
+  <app-explore-container (ionInput)="handleInput($event)"></app-explore-container>
+</ion-header>
+
+<ion-content [fullscreen]="true" color="light" class="ion-padding">
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button >
+      <ion-icon name="add" (click)="NewReporte()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-list class="mt-4">
+    <ion-item [button]="true" *ngFor="let result of results; let index" (click)="presentAlert()" class="bg-gray-100 hover:bg-gray-200">
+      <ion-label class="text-gray-800">{{ result }}</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content class="ion-margin-top"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

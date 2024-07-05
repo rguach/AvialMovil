@@ -1,0 +1,55 @@
+<ion-header class="bg-gray-800 text-white">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="text-center">Configuración</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="bg-gray-100">
+  <ion-list lines="full" class="mt-4">
+    <ion-list-header class="bg-gray-200 text-gray-800">
+      <ion-label class="font-bold">Configuración de la Cuenta</ion-label>
+    </ion-list-header>
+
+    <ion-item class="py-3">
+      <ion-icon name="person-outline" slot="start" class="text-gray-600"></ion-icon>
+      <ion-label class="ml-2">Perfil</ion-label>
+      <ion-button slot="end" fill="clear" (click)="editProfile()" class="text-blue-500">Editar</ion-button>
+    </ion-item>
+
+    <ion-item class="py-3">
+      <ion-icon name="mail-outline" slot="start" class="text-gray-600"></ion-icon>
+      <ion-label class="ml-2">Correo Electrónico</ion-label>
+      <ion-note slot="end"></ion-note>
+      <ion-button slot="end" fill="clear" (click)="changeEmail()" class="text-blue-500">Cambiar</ion-button>
+    </ion-item>
+
+    <ion-item class="py-3">
+      <ion-icon name="lock-closed-outline" slot="start" class="text-gray-600"></ion-icon>
+      <ion-label class="ml-2">Contraseña</ion-label>
+      <ion-button slot="end" fill="clear" (click)="changePassword()" class="text-blue-500">Cambiar</ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-list lines="full" class="mt-4">
+    <ion-list-header class="bg-gray-200 text-gray-800">
+      <ion-label class="font-bold">Preferencias</ion-label>
+    </ion-list-header>
+
+    <ion-item class="py-3">
+      <ion-icon name="moon-outline" slot="start" class="text-gray-600"></ion-icon>
+      <ion-label class="ml-2">Modo Oscuro</ion-label>
+      <ion-toggle slot="end" [(ngModel)]="darkModeEnabled"></ion-toggle>
+    </ion-item>
+
+    <ion-item class="py-3">
+      <ion-icon name="notifications-outline" slot="start" class="text-gray-600"></ion-icon>
+      <ion-label class="ml-2">Notificaciones</ion-label>
+      <ion-toggle slot="end" [(ngModel)]="notificationsEnabled"></ion-toggle>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" color="danger" (click)="logout()" class="mt-4 bg-red-500 hover:bg-red-600">Cerrar sesión</ion-button>
+</ion-content>

@@ -1,0 +1,70 @@
+<app-explore-segments></app-explore-segments>
+
+<ion-content [fullscreen]="false" color="light" class="ion-padding bg-gray-100 dark:bg-gray-800">
+  <form [formGroup]="FotografiasForm" (ngSubmit)="saveData()" class="bg-white p-4 rounded shadow-md dark:bg-gray-800">
+    <b class="text-lg text-gray-900 dark:text-gray-300">Fotografías</b>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="addPhotoToGallery(2)" class="w-full bg-blue-600 text-white dark:bg-blue-500 dark:text-white">
+            <ion-icon name="camera" class="mr-2"></ion-icon> Foto 1
+          </ion-button>
+        </ion-col>
+        <ion-col size="6" (click)="removePhoto(2)" class="cursor-pointer">
+          <ion-img *ngIf="FotografiasForm.get('foto2')!.value" [src]="FotografiasForm.get('foto2')!.value" class="rounded-lg shadow-md dark:border-gray-700"></ion-img>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="addPhotoToGallery(3)" class="w-full bg-blue-600 text-white dark:bg-blue-500 dark:text-white">
+            <ion-icon name="camera" class="mr-2"></ion-icon> Foto 2
+          </ion-button>
+        </ion-col>
+        <ion-col size="6" (click)="removePhoto(3)" class="cursor-pointer">
+          <ion-img *ngIf="FotografiasForm.get('foto3')!.value" [src]="FotografiasForm.get('foto3')!.value" class="rounded-lg shadow-md dark:border-gray-700"></ion-img>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="addPhotoToGallery(4)" class="w-full bg-blue-600 text-white dark:bg-blue-500 dark:text-white">
+            <ion-icon name="camera" class="mr-2"></ion-icon> Foto 3
+          </ion-button>
+        </ion-col>
+        <ion-col size="6" (click)="removePhoto(4)" class="cursor-pointer">
+          <ion-img *ngIf="FotografiasForm.get('foto4')!.value" [src]="FotografiasForm.get('foto4')!.value" class="rounded-lg shadow-md dark:border-gray-700"></ion-img>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="addPhotoToGallery(5)" class="w-full bg-blue-600 text-white dark:bg-blue-500 dark:text-white">
+            <ion-icon name="camera" class="mr-2"></ion-icon> Foto 4
+          </ion-button>
+        </ion-col>
+        <ion-col size="6" (click)="removePhoto(5)" class="cursor-pointer">
+          <ion-img *ngIf="FotografiasForm.get('foto5')!.value" [src]="FotografiasForm.get('foto5')!.value" class="rounded-lg shadow-md dark:border-gray-700"></ion-img>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="addPhotoToGallery(6)" class="w-full bg-blue-600 text-white dark:bg-blue-500 dark:text-white">
+            <ion-icon name="camera" class="mr-2"></ion-icon> Foto 5
+          </ion-button>
+        </ion-col>
+        <ion-col size="6" (click)="removePhoto(6)" class="cursor-pointer">
+          <ion-img *ngIf="FotografiasForm.get('foto6')!.value" [src]="FotografiasForm.get('foto6')!.value" class="rounded-lg shadow-md dark:border-gray-700"></ion-img>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="addPhotoToGallery(7)" class="w-full bg-blue-600 text-white dark:bg-blue-500 dark:text-white">
+            <ion-icon name="camera" class="mr-2"></ion-icon> Foto 6
+          </ion-button>
+        </ion-col>
+        <ion-col size="6" (click)="removePhoto(7)" class="cursor-pointer">
+          <ion-img *ngIf="FotografiasForm.get('foto7')!.value" [src]="FotografiasForm.get('foto7')!.value" class="rounded-lg shadow-md dark:border-gray-700"></ion-img>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-button expand="full" type="submit" class="mt-4 bg-blue-600 text-white dark:bg-blue-500 dark:text-white">Guardar Datos</ion-button>
+  </form>
+</ion-content>

@@ -1,0 +1,120 @@
+<app-explore-segments></app-explore-segments>
+
+<ion-content [fullscreen]="false" color="light" class="ion-padding dark:bg-gray-800  bg-gray-100">
+  <form [formGroup]="UbicacionPericialForm" (ngSubmit)="saveData()" class="space-y-6 bg-white p-4 rounded shadow-md dark:bg-gray-800">
+    <h2 class="font-bold text-lg text-gray-900 dark:text-gray-300">Ubicación del Objeto de Pericia</h2>
+    <div class="space-y-4">
+      <div class="flex items-center space-x-2">
+        <ion-item class="flex-grow bg-white dark:bg-gray-700">
+          <ion-select formControlName="ZonaUbicacion"   label="Zona" class="rounded-md w-full dark:text-gray-300">
+            <ion-select-option *ngFor="let option of dynamicOptions['Zona']" [value]="option">{{ option }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button fill="outline" (click)="addOption('Zona')" class="flex items-center border border-gray-300 rounded-md p-2 bg-white dark:bg-gray-700">
+          <ion-icon name="add-circle-outline" class="text-gray-500 dark:text-gray-300"></ion-icon>
+        </ion-button>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <ion-item class="flex-grow bg-white dark:bg-gray-700">
+          <ion-select formControlName="SubZonaUbicacion" label="SubZona" class="rounded-md w-full dark:text-gray-300">
+            <ion-select-option  *ngFor="let option of dynamicOptions['SubZona']" [value]="option">{{ option }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button fill="outline" (click)="addOption('SubZona')" class="flex items-center border border-gray-300 rounded-md p-2 bg-white dark:bg-gray-700">
+          <ion-icon name="add-circle-outline" class="text-gray-500 dark:text-gray-300"></ion-icon>
+        </ion-button>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <ion-item class="flex-grow bg-white dark:bg-gray-700">
+          <ion-select formControlName="DistritoUbicacion"  label="Distrito" class="rounded-md w-full dark:text-gray-300">
+            <ion-select-option  *ngFor="let option of dynamicOptions['Distrito']" [value]="option">{{ option }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button fill="outline" (click)="addOption('Distrito')" class="flex items-center border border-gray-300 rounded-md p-2 bg-white dark:bg-gray-700">
+          <ion-icon name="add-circle-outline" class="text-gray-500 dark:text-gray-300"></ion-icon>
+        </ion-button>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <ion-item class="flex-grow bg-white dark:bg-gray-700">
+          <ion-select formControlName="Circuito" label="Circuito" class="rounded-md w-full dark:text-gray-300">
+            <ion-select-option *ngFor="let option of dynamicOptions['Circuito']" [value]="option">{{ option }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button fill="outline" (click)="addOption('Circuito')" class="flex items-center border border-gray-300 rounded-md p-2 bg-white dark:bg-gray-700">
+          <ion-icon name="add-circle-outline" class="text-gray-500 dark:text-gray-300"></ion-icon>
+        </ion-button>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <ion-item class="flex-grow bg-white dark:bg-gray-700">
+          <ion-select formControlName="SubCircuito" label="SubCircuito" class="rounded-md w-full dark:text-gray-300">
+            <ion-select-option *ngFor="let option of dynamicOptions['SubCircuito']" [value]="option">{{ option }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button fill="outline" (click)="addOption('SubCircuito')" class="flex items-center border border-gray-300 rounded-md p-2 bg-white dark:bg-gray-700">
+          <ion-icon name="add-circle-outline" class="text-gray-500 dark:text-gray-300"></ion-icon>
+        </ion-button>
+      </div>
+
+      <ion-item class="rounded-md w-full bg-white dark:bg-gray-700">
+        <ion-input formControlName="CodigoSubCircuito" type="number" label="CodigoSubCircuito" class="dark:text-gray-300"></ion-input>
+      </ion-item>
+
+      <ion-item class="rounded-md w-full bg-white dark:bg-gray-700">
+        <ion-input formControlName="Latitud" type="number" label="Latitud" class="dark:text-gray-300"></ion-input>
+      </ion-item>
+
+      <ion-item class="rounded-md w-full bg-white dark:bg-gray-700">
+        <ion-input formControlName="Longitud" type="number" label="Longitud" class="dark:text-gray-300"></ion-input>
+      </ion-item>
+
+      <div class="flex items-center space-x-2">
+        <ion-item class="flex-grow bg-white dark:bg-gray-700">
+          <ion-select formControlName="Lugar" label="Lugar" class="rounded-md w-full dark:text-gray-300">
+            <ion-select-option  *ngFor="let option of dynamicOptions['Lugar']" [value]="option">{{ option }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button fill="outline" (click)="addOption('Lugar')" class="flex items-center border border-gray-300 rounded-md p-2 bg-white dark:bg-gray-700">
+          <ion-icon name="add-circle-outline" class="text-gray-500 dark:text-gray-300"></ion-icon>
+        </ion-button>
+      </div>
+
+      <ion-item class="rounded-md w-full bg-white dark:bg-gray-700">
+        <ion-input formControlName="Propietario" label="Propietario" (ionChange)="toUpperCase($event, 'Propietario')" class="dark:text-gray-300"></ion-input>
+      </ion-item>
+
+      <ion-item class="rounded-md w-full bg-white dark:bg-gray-700" >
+        <ion-input formControlName="Hicc" label="H.I/C.C" class="dark:text-gray-300"(ionChange)="toUpperCase($event, 'Hicc')" ></ion-input>
+      </ion-item>
+
+      <ion-item class="rounded-md w-full bg-white dark:bg-gray-700">
+        <ion-input formControlName="Cedula" type="number" label="Cédula" class="dark:text-gray-300"></ion-input>
+      </ion-item> 
+      
+      <ion-item>
+        <ion-label>Fecha</ion-label>
+        <ion-datetime-button  datetime="datetime"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              formControlName="fechaUbicacion"
+              presentation="date"
+              [formatOptions]="{
+                date: {
+                  weekday: 'short',
+                  month: 'long',
+                  day: '2-digit',
+                }
+              }"
+              id="datetime"
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-item>     
+    </div>
+    <ion-button expand="full" type="submit" class="mt-4 bg-blue-600 text-white dark:bg-blue-500 dark:text-white">Guardar Datos</ion-button>
+  </form>
+</ion-content>

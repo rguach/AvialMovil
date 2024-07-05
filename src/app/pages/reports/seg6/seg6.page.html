@@ -1,0 +1,47 @@
+<app-explore-segments></app-explore-segments>
+
+
+<ion-content [fullscreen]="false" color="light" class="ion-padding dark:bg-gray-800 bg-gray-100">
+  <form [formGroup]="ConclusionesForm"  (ngSubmit)="saveData()" class="space-y-4 bg-white p-4 rounded shadow-md dark:bg-gray-800">
+    <h2 class="font-bold text-lg text-gray-900 dark:text-gray-300">Conclusiones</h2>
+    <div class="space-y-2">
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked">Conclusiones</ion-label>
+        <ion-input formControlName="conclusiones" class="dark:text-gray-300"></ion-input>
+      </ion-item>
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked">Informacion adicional</ion-label>
+        <ion-textarea formControlName="informacionadicional" class="dark:text-gray-300"></ion-textarea>
+      </ion-item>
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked">Anexos</ion-label>
+        <ion-input formControlName="anexos" class="dark:text-gray-300"></ion-input>
+      </ion-item>
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked">Delcaracion Juramentada</ion-label>
+        <ion-input formControlName="declaracionjuramentada" class="dark:text-gray-300"></ion-input>
+      </ion-item>
+      <br>
+        <ion-label position="stacked">Firma de Responsabilidad</ion-label>
+      <br>
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked" class="dark:text-gray-300">Grado, Apellido Nombres</ion-label>
+        <ion-input formControlName="gradonombresyapellidos" class="dark:text-gray-300" (ionChange)="toUpperCase($event, 'gradonombresyapellidos')"></ion-input>
+      </ion-item>
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked" class="dark:text-gray-300">Cedula</ion-label>
+        <ion-input formControlName="cedulafuncionario" class="dark:text-gray-300"type="number"></ion-input>
+      </ion-item>
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked" class="dark:text-gray-300">Telefono</ion-label>
+        <ion-input formControlName="telefonofuncionario" class="dark:text-gray-300" type="number"></ion-input>
+      </ion-item>
+      <ion-item class="bg-gray-100 dark:bg-gray-800">
+        <ion-label position="stacked" class="dark:text-gray-300">Correo</ion-label>
+        <ion-input formControlName="correofuncionario" class="dark:text-gray-300"></ion-input>
+      </ion-item>
+  </div>
+  <ion-button expand="full" type="submit" class="mt-4 bg-blue-600 text-white dark:bg-blue-500 dark:text-white">Guardar Datos</ion-button>
+</form>
+<ion-button expand="full" type="submit" class="mt-4 bg-blue-600 text-white dark:bg-blue-500 dark:text-white" (click)="descargarPDF()">Descargar PDF</ion-button>
+</ion-content>

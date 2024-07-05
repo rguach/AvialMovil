@@ -1,0 +1,13 @@
+<ion-header class="bg-gray-800 dark:bg-gray-800">
+  <ion-toolbar class="bg-gray-800 dark:bg-gray-800">
+    <ion-buttons slot="start">
+      <ion-back-button default-href="/tabs"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="text-black dark:text-gray-300">{{ DatosGeneralesForm.get('antecedente')!.value }}</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="loadSavedDataAndPreview()" class="text-black dark:text-gray-300">
+        <ion-icon name="eye-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
