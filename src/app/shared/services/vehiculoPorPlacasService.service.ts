@@ -12,7 +12,7 @@ export class VehiculoPorPlacasServiceService {
   constructor() { }
 
   async getVehiculoPorPlacas(placa:string){
-    const response:AxiosResponse<VehiculosPlacaResponse>=await axios.get(`${environment.baseUrl}${RutasBackend.vehiculosPorPlaca.Get}?placa=${placa}`);
+    const response:AxiosResponse<VehiculosPlacaResponse>=await axios.get(`${environment.baseUrl}${RutasBackend.vehiculosPorPlaca.get}?placa=${placa}`);
     return response.data;
   }
 }

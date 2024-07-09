@@ -43,27 +43,43 @@
 
     <!-- Dropdown para seleccionar la Marca -->
    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
-      <ion-select formControlName="Marca" placeholder="Seleccionar Marca" class="dark:text-gray-300">
+      <ion-select formControlName="Marca" placeholder="Seleccionar Marca" class="dark:text-gray-300" [(ngModel)]="selectedMarca.idMarca" (ionChange)="onSelectMarca($event)">
         <ion-select-option *ngFor="let marca of marcas" [value]="marca.idMarca">{{marca.nombre}}</ion-select-option>
       </ion-select>
     </ion-item>
-    
+
     <!-- Dropdown para seleccionar el Modelo -->
-    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2" *ngIf="modelos.length > 0">
-      <ion-select formControlName="Modelo" placeholder="Seleccionar Modelo" class="dark:text-gray-300">
-        <ion-select-option *ngFor="let modelo of modelos" [value]="modelo.idModelo">{{modelo.nombre}}</ion-select-option>
+    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
+      <ion-select formControlName="Modelo" placeholder="Seleccionar Modelo" class="dark:text-gray-300" (ionChange)="onSelectModelo($event)">
+        <ion-select-option *ngFor="let modelo of modelos" [value]="modelo.idModelo">
+          {{modelo.nombre}}
+        </ion-select-option>
       </ion-select>
     </ion-item>
 
+
     <!-- Campo para el Tipo de Vehículo -->
     <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
-      <ion-input formControlName="TipoVehiculo" label="Tipo de Vehículo" class="dark:text-gray-300" readonly="true"></ion-input>
+      <ion-select formControlName="TipoVehiculo" placeholder="Seleccionar tipo de vehículo" class="dark:text-gray-300">
+        <ion-select-option *ngFor="let tipo of tipoVehiculo" [value]="tipo.idTipoVehiculo">{{tipo.tipo}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
+      <ion-select formControlName="claseVehiculo" placeholder="Seleccionar clase de vehículo" class="dark:text-gray-300">
+        <ion-select-option *ngFor="let clase of claseVehiculo" [value]="clase.idClaseVehiculo">{{clase.clase}}</ion-select-option>
+      </ion-select>
     </ion-item>
     
     <!-- Campo para el Año -->
     <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
-      <ion-input formControlName="Anio" label="Año" class="dark:text-gray-300" readonly="true"></ion-input>
+      <ion-input formControlName="Anio" label="Año" class="dark:text-gray-300"></ion-input>
     </ion-item>
+
+    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
+      <ion-input formControlName="Disco" label="Disco" class="dark:text-gray-300"></ion-input>
+    </ion-item>
+
 
 
     <!-- Más campos según tu formulario -->

@@ -59,7 +59,6 @@ export interface IInforme {
 export interface IMarca {
   idMarca: number;
   nombre: string;
-  modelos: IModelo[]
 }
 
 export interface IMaterial {
@@ -82,9 +81,6 @@ export interface IModelo {
   idClaseVehiculo: number;
   idMarca: number;
   idTipoVehiculo: number;
-  tipoVehiculo: ITipovehiculo,
-  claseVehiculo: IClasevehiculo
-
 }
 
 export interface IModelorepuesto {
@@ -178,8 +174,10 @@ export interface IMarcasYModelos {
 export interface InformeCompletoResponse{
   patiosRetencion: IPatioretencion[],
   marcas: IMarca[],
+  
   categoriasParte: ICategoriaparte[],
-  tiposParte: ITipoparte[],
+  tipoVehiculo: ITipovehiculo[],
+  clasevehiculo: IClasevehiculo[],
   ubicaciones: IUbicacion[],
   divisionesParte: IDivisionparte[]
   danos:IDanio[],
