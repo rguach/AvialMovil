@@ -19,38 +19,38 @@
 
     <!-- Campo para el propietario -->
     <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
-      <ion-input formControlName="propidentificacion" label="Propietario" class="dark:text-gray-300"
+      <ion-input  labelPlacement="floating" formControlName="propidentificacion" label="Propietario" class="dark:text-gray-300"
         (ionChange)="toUpperCase($event, 'propidentificacion')"></ion-input>
     </ion-item>
 
     <!-- Campo para la Placa Actual (readonly) -->
     <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
-      <ion-input formControlName="PlacaActual" label="Placa Actual" class="dark:text-gray-300"
+      <ion-input  labelPlacement="floating" formControlName="PlacaActual" label="Placa Actual" class="dark:text-gray-300"
         readonly="true"></ion-input>
     </ion-item>
 
     <!-- Campo para el Número de Chasis -->
     <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
-      <ion-input formControlName="NumeroChasis" label="Chasis Nº" class="dark:text-gray-300"
+      <ion-input  labelPlacement="floating" formControlName="NumeroChasis" label="Chasis Nº" class="dark:text-gray-300"
         (ionChange)="toUpperCase($event, 'NumeroChasis')"></ion-input>
     </ion-item>
 
     <!-- Campo para el Número de Motor -->
     <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
-      <ion-input formControlName="NumeroMotor" label="Motor Nº" class="dark:text-gray-300"
+      <ion-input  labelPlacement="floating" formControlName="NumeroMotor" label="Motor Nº" class="dark:text-gray-300"
         (ionChange)="toUpperCase($event, 'NumeroMotor')"></ion-input>
     </ion-item>
 
     <!-- Dropdown para seleccionar la Marca -->
    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
-      <ion-select formControlName="Marca" placeholder="Seleccionar Marca" class="dark:text-gray-300" [(ngModel)]="selectedMarca.idMarca" (ionChange)="onSelectMarca($event)">
+      <ion-select  labelPlacement="stacked" formControlName="Marca" placeholder="Seleccionar Marca" class="dark:text-gray-300" [(ngModel)]="selectedMarca.idMarca" (ionChange)="onSelectMarca($event)">
         <ion-select-option *ngFor="let marca of marcas" [value]="marca.idMarca">{{marca.nombre}}</ion-select-option>
       </ion-select>
     </ion-item>
 
     <!-- Dropdown para seleccionar el Modelo -->
     <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
-      <ion-select formControlName="Modelo" placeholder="Seleccionar Modelo" class="dark:text-gray-300" (ionChange)="onSelectModelo($event)">
+      <ion-select  labelPlacement="stacked" formControlName="Modelo" placeholder="Seleccionar Modelo" class="dark:text-gray-300" (ionChange)="onSelectModelo($event)">
         <ion-select-option *ngFor="let modelo of modelos" [value]="modelo.idModelo">
           {{modelo.nombre}}
         </ion-select-option>
@@ -60,24 +60,36 @@
 
     <!-- Campo para el Tipo de Vehículo -->
     <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
-      <ion-select formControlName="TipoVehiculo" placeholder="Seleccionar tipo de vehículo" class="dark:text-gray-300">
+      <ion-select  labelPlacement="stacked" formControlName="TipoVehiculo" placeholder="Seleccionar tipo de vehículo" class="dark:text-gray-300">
         <ion-select-option *ngFor="let tipo of tipoVehiculo" [value]="tipo.idTipoVehiculo">{{tipo.tipo}}</ion-select-option>
       </ion-select>
     </ion-item>
 
     <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
-      <ion-select formControlName="ClaseVehiculo" placeholder="Seleccionar clase de vehículo" class="dark:text-gray-300">
+      <ion-select  labelPlacement="stacked" formControlName="ClaseVehiculo" placeholder="Seleccionar clase de vehículo" class="dark:text-gray-300">
         <ion-select-option *ngFor="let clase of claseVehiculo" [value]="clase.idClaseVehiculo">{{clase.clase}}</ion-select-option>
       </ion-select>
     </ion-item>
     
     <!-- Campo para el Año -->
     <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
-      <ion-input formControlName="Anio" label="Año" class="dark:text-gray-300"></ion-input>
+      <ion-input  labelPlacement="floating" formControlName="Anio" label="Año" class="dark:text-gray-300"></ion-input>
     </ion-item>
 
     <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
-      <ion-input formControlName="Disco" label="Disco" class="dark:text-gray-300"></ion-input>
+      <ion-input  labelPlacement="floating" formControlName="Disco" label="Disco" class="dark:text-gray-300"></ion-input>
+    </ion-item>
+
+    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
+      <ion-input  labelPlacement="floating" formControlName="Color" label="Color" class="dark:text-gray-300"></ion-input>
+    </ion-item>
+
+    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
+      <ion-input labelPlacement="floating"  formControlName="TipoMotor" label="Tipo de motor" class="dark:text-gray-300"></ion-input>
+    </ion-item>
+
+    <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
+      <ion-input formControlName="fuenteinformacion" label="Fuente de información: " class="dark:text-gray-300" labelPlacement="floating"></ion-input>
     </ion-item>
 
 

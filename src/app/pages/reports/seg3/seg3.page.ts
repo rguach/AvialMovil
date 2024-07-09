@@ -73,23 +73,31 @@ export class Seg3Page implements OnInit {
     private cdr: ChangeDetectorRef
   ) {
     this.IdentificacionPericialForm = this.formBuilder.group({
-      foto1: [''],
-      propidentificacion: ['', Validators.required],
-      PlacaActual: [''],
-      NumeroChasis: ['', Validators.required],
-      NumeroMotor: ['', Validators.required],
-      Marca: ['', Validators.required],
-      Modelo: ['', Validators.required],
-      TipoVehiculo: ['', Validators.required],
+      Anio: ['', Validators.required],      
       ClaseVehiculo: ['', Validators.required],
+      ClaseVehiculoNombre: [''], // Para almacenar el nombre de la clase de vehículo
+
       Color: ['', Validators.required],
-      Anio: ['', Validators.required],
-      TipoMotor: ['', Validators.required],
       Cooperativa: [''],
       Disco: ['', Validators.required],
-      Observacionesidentificacion: [''],
+      Marca: ['', Validators.required],
+      MarcaNombre: [''],  // Para almacenar el nombre de la marca
 
+      Modelo: ['', Validators.required],
+      ModeloNombre: [''], // Para almacenar el nombre del modelo
+
+      NumeroChasis: ['', Validators.required],
+      NumeroMotor: ['', Validators.required],
+      Observacionesidentificacion: [''],
+      PlacaActual: [''],
+      TipoMotor: ['', Validators.required],
+      TipoVehiculo: ['', Validators.required],
+      TipoVehiculoNombre: [''], // Para almacenar el nombre del tipo de vehículo
+
+      foto1: [''],
       fuenteinformacion: ['', Validators.required],
+      propidentificacion: ['', Validators.required],
+
     });
     this.DatosGeneralesForm = this.formBuilder.group({
       antecedente: [''],
@@ -103,37 +111,46 @@ export class Seg3Page implements OnInit {
 
   async onSelectMarca(event: CustomEvent) {
     const marcaId = event.detail.value;
+    const marcaNombre = this.marcas.find(m => m.idMarca === marcaId)?.nombre || '';
     try {
       this.modelos = await this.informeCompletoService.getModelos(marcaId);
-      console.log('Modelos cargados:', this.modelos);
-      this.IdentificacionPericialForm.patchValue({ Modelo: '' });
-      this.IdentificacionPericialForm.setValue({"Anio":this.selectedModelo.año})
-      this.cdr.detectChanges(); // Forzar la detección de cambios
+      this.IdentificacionPericialForm.patchValue({
+        Marca: marcaId,
+        MarcaNombre: marcaNombre,
+        Modelo: '',
+        ModeloNombre: ''
+      });
+      this.cdr.detectChanges();
     } catch (error) {
       console.error('Error al cargar los modelos:', error);
     }
   }
 
   onSelectModelo(event: CustomEvent) {
-    console.log('id modelo', event.detail.value);
     const selectedModeloId = event.detail.value;
-    this.selectedModelo = this.modelos.find((modelo) => modelo.idModelo === selectedModeloId) || this.selectedModelo;
-    
-    // Actualizar el valor del año en el formulario
+    const selectedModelo = this.modelos.find((modelo) => modelo.idModelo === selectedModeloId) || this.selectedModelo;
+    const modeloNombre = selectedModelo.nombre;
+    const tipoVehiculoNombre = this.tipoVehiculo.find(item => item.idTipoVehiculo === selectedModelo.idTipoVehiculo)?.tipo || '';
+    const claseVehiculoNombre = this.claseVehiculo.find(item => item.idClaseVehiculo === selectedModelo.idClaseVehiculo)?.clase || '';
+  
     this.IdentificacionPericialForm.patchValue({ 
-      Anio: this.selectedModelo.año,
-      TipoVehiculo: this.selectedModelo.idTipoVehiculo,
-      claseVehiculo: this.selectedModelo.idClaseVehiculo
+      Modelo: selectedModeloId,
+      ModeloNombre: modeloNombre,
+      Anio: selectedModelo.año,
+      TipoVehiculo: selectedModelo.idTipoVehiculo,
+      TipoVehiculoNombre: tipoVehiculoNombre,
+      ClaseVehiculo: selectedModelo.idClaseVehiculo,
+      ClaseVehiculoNombre: claseVehiculoNombre
     });
   
     // Filtrar tipo y clase de vehículo
     this.tipoVehiculo = this.tipoVehiculo.filter(
-      (item) => item.idTipoVehiculo === this.selectedModelo.idTipoVehiculo
+      (item) => item.idTipoVehiculo === selectedModelo.idTipoVehiculo
     );
     this.claseVehiculo = this.claseVehiculo.filter(
-      (item) => item.idClaseVehiculo === this.selectedModelo.idClaseVehiculo
+      (item) => item.idClaseVehiculo === selectedModelo.idClaseVehiculo
     );
-
+  
     if (this.tipoVehiculo.length === 1) {
       this.IdentificacionPericialForm.patchValue({ TipoVehiculo: this.tipoVehiculo[0].idTipoVehiculo });
     }
@@ -141,7 +158,6 @@ export class Seg3Page implements OnInit {
       this.IdentificacionPericialForm.patchValue({ ClaseVehiculo: this.claseVehiculo[0].idClaseVehiculo });
     }
   
-    // Forzar la detección de cambios
     this.cdr.detectChanges();
   }
 
@@ -168,13 +184,15 @@ export class Seg3Page implements OnInit {
   async showErrorAlert(error: string, details: string) {
     const alert = await this.alertController.create({
       header: 'Error',
-      message: `${error}: ${details}`,
+      message: `${error}: ${details}`,  
       buttons: ['OK'],
     });
     await alert.present();
   }
 
   async saveData() {
+    console.log(this.IdentificacionPericialForm.invalid);
+    console.log(this.IdentificacionPericialForm);
     if (this.IdentificacionPericialForm.invalid) {
       const alert = await this.alertController.create({
         header: 'Advertencia',
@@ -190,6 +208,7 @@ export class Seg3Page implements OnInit {
       return;
     }
     const formData = this.IdentificacionPericialForm.value;
+
     if (formData.foto1) {
       this.dataService.guardarImagen(formData.foto1);
     }

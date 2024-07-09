@@ -3,7 +3,6 @@ import axios, { AxiosResponse } from 'axios';
 import { IMarca, IModelo, InformeCompletoResponse } from '../common/DTO/EntidadesInforme';
 import { environment } from 'src/environments/environment';
 import { RutasBackend } from '../common/helpers/RutasBackend';
-import { ImageCompression } from 'jspdf';
 import { ResponseBackend } from '../common/DTO/Response';
 
 @Injectable({
