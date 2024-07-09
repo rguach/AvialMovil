@@ -81,6 +81,7 @@ export class Seg3Page implements OnInit {
       Marca: ['', Validators.required],
       Modelo: ['', Validators.required],
       TipoVehiculo: ['', Validators.required],
+      ClaseVehiculo: ['', Validators.required],
       Color: ['', Validators.required],
       Anio: ['', Validators.required],
       TipoMotor: ['', Validators.required],
@@ -132,6 +133,13 @@ export class Seg3Page implements OnInit {
     this.claseVehiculo = this.claseVehiculo.filter(
       (item) => item.idClaseVehiculo === this.selectedModelo.idClaseVehiculo
     );
+
+    if (this.tipoVehiculo.length === 1) {
+      this.IdentificacionPericialForm.patchValue({ TipoVehiculo: this.tipoVehiculo[0].idTipoVehiculo });
+    }
+    if (this.claseVehiculo.length === 1) {
+      this.IdentificacionPericialForm.patchValue({ ClaseVehiculo: this.claseVehiculo[0].idClaseVehiculo });
+    }
   
     // Forzar la detección de cambios
     this.cdr.detectChanges();
