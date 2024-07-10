@@ -51,15 +51,15 @@
       <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2" *ngIf="!isTipoParteEmpty(tipoParteSelected)">
         <ion-select formControlName="divisionParte" placeholder="Seleccionar división de parte" label="División de parte"
           class="dark:text-gray-300" [(ngModel)]="divisionParteSelected.idDivisionParte"
-          (ionChange)="onSelectTipoParte($event)">
+          (ionChange)="onSelectDivisionParte($event)">
           <ion-select-option *ngFor="let d of divisionPartes" [value]="d.idDivisionParte">{{ d.nombre
             }}</ion-select-option>
         </ion-select>
       </ion-item>
 
       <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
-        <ion-select formControlName="danios" placeholder="Seleccionar los daños" [multiple]="true" label="Daños"
-          class="dark:text-gray-300" [(ngModel)]="daniosSeleccionados" (ionChange)="onSelectTipoParte($event)">
+        <ion-select formControlName="danios" placeholder="Seleccionar los daños" label="Daños"
+          class="dark:text-gray-300" [(ngModel)]="danioSeleccionados.idDanio" (ionChange)="onSelectDanio($event)">
           <ion-select-option *ngFor="let d of danios" [value]="d.idDanio">{{
             d.nombre
             }}</ion-select-option>
@@ -86,6 +86,10 @@
         Área afectada: {{ areaAfectada }}
       </p>
     </div>
+    
+    <ion-button id="agregar_detalles" class="mt-6 bg-blue-600 text-white disabled:opacity-50 dark:bg-blue-500 dark:text-white" (click)="addDetalles()">
+      Agregar detalles
+    </ion-button>
 
     <ion-button expand="block" class="mt-6 bg-blue-600 text-white disabled:opacity-50 dark:bg-blue-500 dark:text-white"
       (click)="guardarDano()" [disabled]="
@@ -97,4 +101,7 @@
       Guardar Daño
     </ion-button>
   </form>
+
+  <ion-toast trigger="agregar_detalles" message="Has agregado el detalle correctamente" [duration]="2000"></ion-toast>
+
 </ion-content>

@@ -13,7 +13,8 @@ export const RutasBackend = {
     },
 
     informeCopmpleto:{
-        get:"/api/InformeCompleto/Get/Prerequisitos"
+        get:"/api/InformeCompleto/Get/Prerequisitos",
+        post:"/api/InformeCompleto/ConsultaPresupuesto/consulta"
     },
     patiosRetencion:{
         get:"/api/Patioretencions/Get"

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import axios, { AxiosResponse } from 'axios';
 import { ResponseBackend } from '../../common/DTO/Response';
-import { ICategoriaparte, IDanio, IDivisionparte, ITipoparte, IUbicacion } from '../../common/DTO/EntidadesInforme';
+import {  ICalcularDañosDTO, ICategoriaparte, IDanio, IDivisionparte, ITipoparte, IUbicacion } from '../../common/DTO/EntidadesInforme';
 import { environment } from 'src/environments/environment';
 import { RutasBackend } from '../../common/helpers/RutasBackend';
 
@@ -59,6 +59,25 @@ export class DaniosService {
     }
 
     return response.data
+  }
+
+  async cotizarDaños(detalles: ICalcularDañosDTO): Promise<ResponseBackend<ICalcularDañosDTO>> {
+    const data = {
+      danios: detalles,
+      modelo: '', // Agregar si es necesario
+      anioVehiculo: 0 // Agregar si es necesario
+    };
+
+    try {
+      const response: AxiosResponse<ResponseBackend<ICalcularDañosDTO>> = await axios.post(
+        `${environment.baseUrl}${RutasBackend.informeCopmpleto.post}`,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error al cotizar daños:', error);
+      throw error;
+    }
   }
 
 
