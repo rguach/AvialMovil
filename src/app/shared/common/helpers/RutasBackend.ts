@@ -3,16 +3,39 @@ export const RutasBackend = {
         Authenticate: '/api/Usuarios/Autenticate',
     },
     vehiculos: {
-        GetMarcas: '/api/Marcas/GetMarcas',
-        GetModelos: '/api/Modelos/GetModelos',
-        GetClaseVehiculo: '/api/ClaseVehiculos/GetClaseVehiculos',
-        GetTipoVehiculo: '/api/TipoVehiculos/GetTipoVehiculos',
+        getMarcas: '/api/Marcas/GetMarcas',
+        getModelos: '/api/Modelos/GetModelos',
+        getClaseVehiculo: '/api/ClaseVehiculos/GetClaseVehiculos',
+        getTipoVehiculo: '/api/TipoVehiculos/GetTipoVehiculos',
     },
     vehiculosPorPlaca:{
-        Get:"/api/Scrapping/GetVehiculoPorPlacas"
+        get:"/api/Scrapping/GetVehiculoPorPlacas"
     },
 
-    InformeCompleto:{
-        Get:"/api/InformeCompleto/Get/Prerequisitos"
+    informeCopmpleto:{
+        get:"/api/InformeCompleto/Get/Prerequisitos",
+        post:"/api/InformeCompleto/ConsultaPresupuesto/consulta"
+    },
+    patiosRetencion:{
+        get:"/api/Patioretencions/Get"
+    },
+    tipoPartes:{
+        get:"/api/Tipopartes/GetTipoPartes"
+    },
+
+    divisionPartes:{
+        get:"/api/Divisionpartes/GetDivisionpartes"
+    },
+    ubicaciones:{
+        get:"/api/Ubicaciones/Get"
+    },
+    categoriaPartes:{
+        get:"/api/Categoriapartes/GetCategoriapartes"
+    },
+    danios:{
+        get:"/api/Danios/Get"
     }
+    
+
+    
 }

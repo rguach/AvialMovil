@@ -1,34 +1,61 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { DataService } from 'src/app/shared/services/data.service';
 import { PhotoService } from '../../../shared/services/photo.service';
-import { AlertController, NavController } from '@ionic/angular';
+import {
+  AlertController,
+  NavController,
+} from '@ionic/angular';
 import { InformeCompletoService } from 'src/app/shared/services/InformeCompletoService.service';
 import {
+  IClasevehiculo,
   IMarca,
   IModelo,
   InformeCompletoResponse,
   ITipovehiculo,
-} from 'src/app/shared/common/DTO/Entidades';
-import { VehiculosPlacaResponse } from 'src/app/shared/common/DTO/VehiculosPlacaResponse';
+} from 'src/app/shared/common/DTO/EntidadesInforme';
 
 @Component({
   selector: 'app-seg3',
   templateUrl: './seg3.page.html',
   styleUrls: ['./seg3.page.scss'],
+  providers: [InformeCompletoService],
 })
 export class Seg3Page implements OnInit {
   DatosGeneralesForm: FormGroup;
   IdentificacionPericialForm: FormGroup;
 
   marcas: IMarca[] = [];
-  modelos: IModelo[]=[];
-  tipoVehiculo: ITipovehiculo | undefined;
+  modelos: IModelo[] = [];
+  tipoVehiculo: ITipovehiculo[] = [];
+  claseVehiculo: IClasevehiculo[] = [];
 
-
-  tipoVehiculoSeleccionado:number=0;
-  marcaSeleccionada: number = 0;
-  modeloSeleccionado: number = 0
+  public selectedMarca: IMarca = {
+    idMarca: 0,
+    nombre: '',
+  };
+  public selectedModelo: IModelo = {
+    idModelo: 0,
+    nombre: '',
+    año: '',
+    numeroChasis: '',
+    numeroMotor: '',
+    idClaseVehiculo: 0,
+    idMarca: 0,
+    idTipoVehiculo: 0,
+  };
+  public selectedTipoVehiculo: ITipovehiculo = {
+    idTipoVehiculo: 0,
+    tipo: '',
+  };
+  public selectedClaseVehiculo: IClasevehiculo = {
+    idClaseVehiculo: 0,
+    clase: '',
+  };
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,69 +63,108 @@ export class Seg3Page implements OnInit {
     public photoService: PhotoService,
     private navCtrl: NavController,
     private alertController: AlertController,
-    private informeCompletoService: InformeCompletoService
+    private informeCompletoService: InformeCompletoService,
+    private cdr: ChangeDetectorRef
   ) {
     this.IdentificacionPericialForm = this.formBuilder.group({
-      foto1: [''],
-      propidentificacion: ['', Validators.required],
-      PlacaActual: [''],
-      NumeroChasis: ['', Validators.required],
-      NumeroMotor: ['', Validators.required],
-      Marca: ['', Validators.required],
-      Modelo: ['', Validators.required],
+      Anio: ['', Validators.required],      
+      ClaseVehiculo: ['', Validators.required],
+      ClaseVehiculoNombre: [''], // Para almacenar el nombre de la clase de vehículo
+
       Color: ['', Validators.required],
-      Anio: ['', Validators.required],
-      TipoMotor: ['', Validators.required],
       Cooperativa: [''],
       Disco: ['', Validators.required],
+      Marca: ['', Validators.required],
+      MarcaNombre: [''],  // Para almacenar el nombre de la marca
+
+      Modelo: ['', Validators.required],
+      ModeloNombre: [''], // Para almacenar el nombre del modelo
+
+      NumeroChasis: ['', Validators.required],
+      NumeroMotor: ['', Validators.required],
       Observacionesidentificacion: [''],
-      TipoVehiculo: ['',Validators.required],
+      PlacaActual: [''],
+      TipoMotor: ['', Validators.required],
+      TipoVehiculo: ['', Validators.required],
+      TipoVehiculoNombre: [''], // Para almacenar el nombre del tipo de vehículo
+
+      foto1: [''],
       fuenteinformacion: ['', Validators.required],
+      propidentificacion: ['', Validators.required],
+
     });
     this.DatosGeneralesForm = this.formBuilder.group({
       antecedente: [''],
     });
   }
 
-
   async ngOnInit() {
-    console.log('ngOnInit started');
-    await this.loadDataFromServer();
-    this.obtenerDatosGuardados();
-    this.loadSavedData();
-    this.loadVehicleData();
-
-    this.DatosGeneralesForm.get('antecedente')?.valueChanges.subscribe(
-      (value) => {
-        this.IdentificacionPericialForm.get('PlacaActual')?.setValue(value);
-      }
-    );
-
-    const antecedenteValue = this.DatosGeneralesForm.get('antecedente')?.value;
-    if (antecedenteValue) {
-      this.IdentificacionPericialForm.get('PlacaActual')?.setValue(
-        antecedenteValue
-      );
-    }
-
-    this.IdentificacionPericialForm.get('Marca')?.valueChanges.subscribe(
-      (marcaId: number) => {
-        this.onMarcaChange(marcaId);
-      }
-    );
-
-    this.IdentificacionPericialForm.get('Modelo')?.valueChanges.subscribe(
-      (modeloId: number) => {
-        this.onModeloChange(modeloId);
-      }
-    );
-    console.log('ngOnInit completed');
+    this.loadDataFromServer();
+    this.modelos = []; // Inicializa los modelos como un array vacío
   }
+
+  async onSelectMarca(event: CustomEvent) {
+    const marcaId = event.detail.value;
+    const marcaNombre = this.marcas.find(m => m.idMarca === marcaId)?.nombre || '';
+    try {
+      this.modelos = await this.informeCompletoService.getModelos(marcaId);
+      this.IdentificacionPericialForm.patchValue({
+        Marca: marcaId,
+        MarcaNombre: marcaNombre,
+        Modelo: '',
+        ModeloNombre: ''
+      });
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Error al cargar los modelos:', error);
+    }
+  }
+
+  onSelectModelo(event: CustomEvent) {
+    const selectedModeloId = event.detail.value;
+    const selectedModelo = this.modelos.find((modelo) => modelo.idModelo === selectedModeloId) || this.selectedModelo;
+    const modeloNombre = selectedModelo.nombre;
+    const tipoVehiculoNombre = this.tipoVehiculo.find(item => item.idTipoVehiculo === selectedModelo.idTipoVehiculo)?.tipo || '';
+    const claseVehiculoNombre = this.claseVehiculo.find(item => item.idClaseVehiculo === selectedModelo.idClaseVehiculo)?.clase || '';
+  
+    this.IdentificacionPericialForm.patchValue({ 
+      Modelo: selectedModeloId,
+      ModeloNombre: modeloNombre,
+      Anio: selectedModelo.año,
+      TipoVehiculo: selectedModelo.idTipoVehiculo,
+      TipoVehiculoNombre: tipoVehiculoNombre,
+      ClaseVehiculo: selectedModelo.idClaseVehiculo,
+      ClaseVehiculoNombre: claseVehiculoNombre
+    });
+  
+    // Filtrar tipo y clase de vehículo
+    this.tipoVehiculo = this.tipoVehiculo.filter(
+      (item) => item.idTipoVehiculo === selectedModelo.idTipoVehiculo
+    );
+    this.claseVehiculo = this.claseVehiculo.filter(
+      (item) => item.idClaseVehiculo === selectedModelo.idClaseVehiculo
+    );
+  
+    if (this.tipoVehiculo.length === 1) {
+      this.IdentificacionPericialForm.patchValue({ TipoVehiculo: this.tipoVehiculo[0].idTipoVehiculo });
+    }
+    if (this.claseVehiculo.length === 1) {
+      this.IdentificacionPericialForm.patchValue({ ClaseVehiculo: this.claseVehiculo[0].idClaseVehiculo });
+    }
+  
+    this.cdr.detectChanges();
+  }
+
   async loadDataFromServer() {
     try {
-      const response: InformeCompletoResponse = await this.informeCompletoService.getDatos();
+      const response: InformeCompletoResponse =
+        await this.informeCompletoService.getDatos();
       this.marcas = response.marcas;
+      (this.tipoVehiculo = response.tipoVehiculo),
+        (this.claseVehiculo = response.clasevehiculo);
+
       console.log('Marcas loaded:', this.marcas);
+      console.log('clases loaded:', this.claseVehiculo);
     } catch (error) {
       console.error('Error loading data from server:', error);
       this.showErrorAlert(
@@ -108,105 +174,19 @@ export class Seg3Page implements OnInit {
     }
   }
 
-  loadVehicleData() {
-    console.log('loadVehicleData started');
-    const vehicleDataString = localStorage.getItem('vehiculoPorPlacas');
-    if (vehicleDataString) {
-      try {
-        const vehicleData = JSON.parse(vehicleDataString);
-        console.log('Vehicle data loaded:', vehicleData);
-        if ('error' in vehicleData) {
-          this.showErrorAlert(vehicleData.error, vehicleData.details);
-        } else {
-          this.populateFormWithVehicleData(vehicleData);
-        }
-      } catch (error) {
-        console.error('Error parsing vehicle data:', error);
-        this.showErrorAlert(
-          'Error de parsing',
-          'Los datos del vehículo no son válidos.'
-        );
-      }
-    }
-    console.log('loadVehicleData completed');
-  }
-
-  populateFormWithVehicleData(vehicleData: VehiculosPlacaResponse) {
-    console.log('populateFormWithVehicleData started', vehicleData);
-    this.IdentificacionPericialForm.patchValue({
-      PlacaActual: vehicleData.placa,
-      Marca: vehicleData.marca,
-      Modelo: vehicleData.modelo,
-      Anio: vehicleData.año,
-    });
-  
-    this.marcaSeleccionada =
-      this.marcas.find((marca) => marca.nombre === vehicleData.marca)
-        ?.idMarca || 0;
-    console.log('Marca seleccionada:', this.marcaSeleccionada);
-    this.cargarModelos();
-    const modeloSeleccionado = this.modelos.find((modelo) => modelo.nombre === vehicleData.modelo);
-    if (modeloSeleccionado) {
-      this.modeloSeleccionado = modeloSeleccionado.idModelo;
-      this.tipoVehiculo = modeloSeleccionado.tipoVehiculo;
-      this.tipoVehiculoSeleccionado = modeloSeleccionado.tipoVehiculo.idTipoVehiculo;
-    }
-  
-    console.log('Modelo seleccionado:', this.modeloSeleccionado);
-
-  }
-  
+  //#region relacionado con metodos internos de la aplicacion
   async showErrorAlert(error: string, details: string) {
     const alert = await this.alertController.create({
       header: 'Error',
-      message: `${error}: ${details}`,
+      message: `${error}: ${details}`,  
       buttons: ['OK'],
     });
     await alert.present();
   }
 
-  cargarModelos() {
-    this.modeloSeleccionado = 0;
-    this.IdentificacionPericialForm.get('Modelo')?.setValue('');
-    const marcaSeleccionada = this.marcas.find(m => m.idMarca === this.marcaSeleccionada);
-    this.modelos = marcaSeleccionada ? marcaSeleccionada.modelos : [];
-  }
-
-  cargarTiposVehiculo() {
-    this.tipoVehiculoSeleccionado = 0;
-    this.IdentificacionPericialForm.get('TipoVehiculo')?.setValue('');
-    const modeloSeleccionado = this.modelos.find(m => m.idModelo === this.modeloSeleccionado);
-    this.tipoVehiculo = modeloSeleccionado ? modeloSeleccionado.tipoVehiculo : undefined;
-  }
-
-  onModeloChange(modeloId: number) {
-    const modeloSeleccionado = this.modelos.find(m => m.idModelo === modeloId);
-    if (modeloSeleccionado) {
-      this.IdentificacionPericialForm.patchValue({
-        Anio: modeloSeleccionado.año,
-        TipoVehiculo: modeloSeleccionado.tipoVehiculo.tipo
-      });
-      this.tipoVehiculo = modeloSeleccionado.tipoVehiculo;
-    } else {
-      this.IdentificacionPericialForm.patchValue({
-        Anio: '',
-        TipoVehiculo: ''
-      });
-      this.tipoVehiculo = undefined;
-    }
-  }
-  onMarcaChange(marcaId: number) {
-    this.marcaSeleccionada = marcaId;
-    const marcaSeleccionada = this.marcas.find(m => m.idMarca === marcaId);
-    this.modelos = marcaSeleccionada ? marcaSeleccionada.modelos : [];
-    this.IdentificacionPericialForm.patchValue({
-      Modelo: '',
-      Anio: '',
-      TipoVehiculo: ''
-    });
-  }
-
   async saveData() {
+    console.log(this.IdentificacionPericialForm.invalid);
+    console.log(this.IdentificacionPericialForm);
     if (this.IdentificacionPericialForm.invalid) {
       const alert = await this.alertController.create({
         header: 'Advertencia',
@@ -222,6 +202,7 @@ export class Seg3Page implements OnInit {
       return;
     }
     const formData = this.IdentificacionPericialForm.value;
+
     if (formData.foto1) {
       this.dataService.guardarImagen(formData.foto1);
     }
@@ -282,4 +263,5 @@ export class Seg3Page implements OnInit {
       formControl.setValue(value, { emitEvent: false });
     }
   }
+  //#endregion
 }

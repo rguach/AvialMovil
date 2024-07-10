@@ -30,6 +30,8 @@ export class ExploreSegmentsComponent implements OnInit {
   pdfSrc: string | ArrayBuffer | null = null;
 
 
+  
+
   constructor(
     private formBuilder: FormBuilder,
     private datosService: DatosService,
@@ -74,22 +76,27 @@ export class ExploreSegmentsComponent implements OnInit {
       fechaUbicacion: [new Date().toISOString()],
     });
     this.IdentificacionPericialForm = this.formBuilder.group({
-      foto1 : ['',],
-      propidentificacion: ['',Validators.required],
-      PlacaActual: [],
-      NumeroChasis: ['',Validators.required, ],
-      NumeroMotor: ['',Validators.required, ],
-      Marca: ['',Validators.required],
-      Modelo: ['',Validators.required],
-      Clase:['',Validators.required],
-      Tipo:['',Validators.required],
-      Color: ['',Validators.required],
-      Anio: ['',Validators.required],
-      TipoMotor: ['', Validators.required],
+      Anio: ['', Validators.required],      
+      ClaseVehiculo: ['', Validators.required],
+      ClaseVehiculoNombre: [''], // Para almacenar el nombre de la clase de vehículo
+
+      Color: ['', Validators.required],
       Cooperativa: [''],
-      Disco: ['',Validators.required],
+      Disco: ['', Validators.required],
+      Marca: ['', Validators.required],
+      MarcaNombre: [''],  // Para almacenar el nombre de la marca
+      Modelo: ['', Validators.required],
+      ModeloNombre: [''], // Para almacenar el nombre del modelo
+      NumeroChasis: ['', Validators.required],
+      NumeroMotor: ['', Validators.required],
       Observacionesidentificacion: [''],
-      fuenteinformacion: ['',Validators.required],
+      PlacaActual: [''],
+      TipoMotor: ['', Validators.required],
+      TipoVehiculo: ['', Validators.required],
+      TipoVehiculoNombre: [''], // Para almacenar el nombre del tipo de vehículo
+      foto1: [''],
+      fuenteinformacion: ['', Validators.required],
+      propidentificacion: ['', Validators.required],
     });
     this.FotografiasForm = this.formBuilder.group({
       foto2: [''],
@@ -111,6 +118,7 @@ export class ExploreSegmentsComponent implements OnInit {
     });
   }
 
+  
   ngOnInit() {
     this.loadSavedData();
   }
@@ -199,7 +207,10 @@ export class ExploreSegmentsComponent implements OnInit {
     }
   }
 
+ 
   async previsualizar() {
+
+    
     const formData = this.DatosGeneralesForm.value;
     const formDataUbicacion = this.UbicacionPericialForm.value;
     const formDataIdentificacion = this.IdentificacionPericialForm.value;
@@ -216,9 +227,9 @@ export class ExploreSegmentsComponent implements OnInit {
     const{ZonaUbicacion,SubZonaUbicacion,DistritoUbicacion,Circuito,
       SubCircuito,CodigoSubCircuito,Latitud,Longitud,Lugar,Propietario,Hicc,Cedula,fechaUbicacion}=formDataUbicacion;  
      
-    const{foto1,propidentificacion,PlacaActual,NumeroChasis,NumeroMotor,Marca,Modelo,Clase,Tipo,Color,
+    const{foto1,propidentificacion,PlacaActual,NumeroChasis,NumeroMotor,Marca,Modelo,ModeloNombre, MarcaNombre,ClaseVehiculoNombre,TipoVehiculoNombre,Clase,Tipo,Color,
       Anio,TipoMotor,Cooperativa,Disco,Observacionesidentificacion,fuenteinformacion}=formDataIdentificacion;
-    
+      
     const{foto2,foto3,foto4,foto5,foto6,foto7}=formDataFotografias;
 
     const{conclusiones,informacionadicional,anexos,declaracionjuramentada,gradonombresyapellidos,cedulafuncionario,telefonofuncionario,
@@ -410,19 +421,19 @@ export class ExploreSegmentsComponent implements OnInit {
         ],
         [
           {content:'MARCA', colSpan: 1},
-          {content:Marca, colSpan: 4},
+          {content:MarcaNombre, colSpan: 4},
         ],
         [
           {content:'MODELO', colSpan: 1},
-          {content:Modelo, colSpan: 4},
+          {content:ModeloNombre, colSpan: 4},
         ],
         [
           {content:'CLASE', colSpan: 1},
-          {content:Clase, colSpan: 4},
+          {content:ClaseVehiculoNombre, colSpan: 4},
         ],
         [
           {content:'TIPO', colSpan: 1},
-          {content:Tipo, colSpan: 4},
+          {content:TipoVehiculoNombre, colSpan: 4},
         ],
         [
           {content:'COLOR', colSpan: 1},
@@ -454,7 +465,7 @@ export class ExploreSegmentsComponent implements OnInit {
         ],
         [
           {content:'FOTOGRAFÍA N° 1. De conjunto', colSpan: 1, styles: { fontStyle: 'italic' }},
-          {content: foto1, colSpan: 4},
+          {content:foto1, colSpan: 4,},
         ],
         [
           {content:'FASE 2: DESCRIPCION DE DAÑOS MATERIALES', 
@@ -515,6 +526,7 @@ export class ExploreSegmentsComponent implements OnInit {
           {content:'', colSpan: 4},
         ],
       ],
+
       theme: 'grid',
       styles: {
         fontSize: 9,
@@ -714,7 +726,7 @@ async getImageForPdf(imageData: string): Promise<any> {
 
   // Si ya es una imagen base64, úsala directamente
   if (imageData.startsWith('data:image')) {
-    return { image: imageData, fit: [80, 60] };
+    return { image: imageData, width: 80, height: 60 };
   }
 
   // Para otros casos (como rutas de archivo en plataformas nativas)
@@ -725,13 +737,14 @@ async getImageForPdf(imageData: string): Promise<any> {
         directory: Directory.Data
       });
       const base64Image = `data:image/jpeg;base64,${file.data}`;
-      return { image: base64Image, fit: [80, 60] };
+      return { image: base64Image, width: 80, height: 60 };
     } catch (error) {
       console.error('Error al leer la imagen:', error);
       return '';
     }
   }
 
-  return ''; // Retorna una cadena vacía si no se pudo procesar la imagen
+  // Si no se pudo procesar la imagen, retorna una cadena vacía
+  return '';
 }
 }

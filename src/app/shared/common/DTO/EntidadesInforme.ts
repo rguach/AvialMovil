@@ -27,6 +27,8 @@ export interface IDanio {
 export interface IDivisionparte {
   idDivisionParte: number;
   nombre: string;
+  filas: number;
+  columnas: number;
 }
 
 export interface IEmpresa {
@@ -59,7 +61,6 @@ export interface IInforme {
 export interface IMarca {
   idMarca: number;
   nombre: string;
-  modelos: IModelo[]
 }
 
 export interface IMaterial {
@@ -82,9 +83,6 @@ export interface IModelo {
   idClaseVehiculo: number;
   idMarca: number;
   idTipoVehiculo: number;
-  tipoVehiculo: ITipovehiculo,
-  claseVehiculo: IClasevehiculo
-
 }
 
 export interface IModelorepuesto {
@@ -175,14 +173,27 @@ export interface IMarcasYModelos {
   nombre: string;
   modelos: IModelo[];
 }
-export interface InformeCompletoResponse{
-  patiosRetencion: IPatioretencion[],
-  marcas: IMarca[],
-  categoriasParte: ICategoriaparte[],
-  tiposParte: ITipoparte[],
-  ubicaciones: IUbicacion[],
-  divisionesParte: IDivisionparte[]
-  danos:IDanio[],
-  materiales: IMaterial[],
 
+export interface IDetallesDTO {
+  tipoParte: string;
+  ubicacion: string;
+  danio: string;
+}
+
+export interface ICalcularDañosDTO{
+  danios:IDetallesDTO[],
+  modelo:string,
+  anioVehiculo:number
+}
+export interface InformeCompletoResponse {
+  patiosRetencion: IPatioretencion[];
+  marcas: IMarca[];
+
+  categoriasParte: ICategoriaparte[];
+  tipoVehiculo: ITipovehiculo[];
+  clasevehiculo: IClasevehiculo[];
+  ubicaciones: IUbicacion[];
+  divisionesParte: IDivisionparte[];
+  danos: IDanio[];
+  materiales: IMaterial[];
 }

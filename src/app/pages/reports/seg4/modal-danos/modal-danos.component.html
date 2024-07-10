@@ -10,62 +10,98 @@
 </ion-header>
 
 <ion-content class="p-4 bg-gray-100 dark:bg-gray-900">
-  <ion-list class="bg-white rounded shadow-md p-4 dark:bg-gray-800">
+  <form [formGroup]="formDanios">
+    <ion-list class="bg-white rounded shadow-md p-4 dark:bg-gray-800">
+      <ion-item class="flex flex-col md:flex-row md:items-center dark:text-gray-300">
+        <ion-label class="md:w-1/3 text-gray-900 dark:text-gray-300">Zona</ion-label>
+        <ion-select class="md:w-2/3 text-gray-900 dark:text-gray-300" [(ngModel)]="zonaSeleccionada"
+          (ionChange)="cargarSubzonas()" interface="popover">
+          <ion-select-option *ngFor="let zona of zonas" [value]="zona" class="text-gray-900 dark:text-gray-300">
+            {{ zona }}</ion-select-option>
+        </ion-select>
+      </ion-item>
 
-    <ion-item class="flex flex-col md:flex-row md:items-center dark:text-gray-300">
-      <ion-label class="md:w-1/3 text-gray-900 dark:text-gray-300">Zona</ion-label>
-      <ion-select
-        class="md:w-2/3 text-gray-900 dark:text-gray-300"
-        [(ngModel)]="zonaSeleccionada"
-        (ionChange)="cargarSubzonas()"
-        interface="popover">
-        <ion-select-option *ngFor="let zona of zonas" [value]="zona" class="text-gray-900 dark:text-gray-300">{{ zona }}</ion-select-option>
-      </ion-select>
-    </ion-item>
+      <ion-item class="flex flex-col md:flex-row md:items-center dark:text-gray-300">
+        <ion-label class="md:w-1/3 text-gray-900 dark:text-gray-300">SubZona</ion-label>
+        <ion-select class="md:w-2/3 text-gray-900 dark:text-gray-300" [(ngModel)]="subzonaSeleccionada"
+          (ionChange)="cargarPiezas()" interface="popover">
+          <ion-select-option *ngFor="let subzona of subzona[zonaSeleccionada]" [value]="subzona"
+            class="text-gray-900 dark:text-gray-300">{{ subzona }}</ion-select-option>
+        </ion-select>
+      </ion-item>
 
+      <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2 flex justify-between">
 
-    <ion-item class="flex flex-col md:flex-row md:items-center dark:text-gray-300">
-      <ion-label class="md:w-1/3 text-gray-900 dark:text-gray-300">SubZona</ion-label>
-      <ion-select
-        class="md:w-2/3 text-gray-900 dark:text-gray-300"
-        [(ngModel)]="subzonaSeleccionada"
-        (ionChange)="cargarPiezas()"
-        interface="popover">
-        <ion-select-option *ngFor="let subzona of subzona[zonaSeleccionada]" [value]="subzona" class="text-gray-900 dark:text-gray-300">{{ subzona }}</ion-select-option>
-      </ion-select>
-    </ion-item>
+        <ion-select formControlName="tipoParte" placeholder="Seleccionar tipo de parte" label="Tipo de parte"
+          class="dark:text-gray-300" [(ngModel)]="tipoParteSelected.idTipoParte"
+          (ionChange)="onSelectTipoParte($event)">
+          <ion-select-option *ngFor="let tp of tipoPartes" [value]="tp.idTipoParte">{{ tp.nombre }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2" *ngIf="!isTipoParteEmpty(tipoParteSelected)">
+        <ion-select formControlName="categoriaParte" placeholder="Seleccionar categoría de parte" label="Categoría de parte"
+          class="dark:text-gray-300" [(ngModel)]="categoriaParteSelected.idCategoriaParte"
+          (ionChange)="onSelectTipoParte($event)">
+          <ion-select-option *ngFor="let c of categoriaPartes" [value]="c.idCategoriaParte">{{ c.nombre
+            }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2" *ngIf="!isTipoParteEmpty(tipoParteSelected)">
+        <ion-select formControlName="divisionParte" placeholder="Seleccionar división de parte" label="División de parte"
+          class="dark:text-gray-300" [(ngModel)]="divisionParteSelected.idDivisionParte"
+          (ionChange)="onSelectDivisionParte($event)">
+          <ion-select-option *ngFor="let d of divisionPartes" [value]="d.idDivisionParte">{{ d.nombre
+            }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item class="dark:bg-gray-800 dark:text-gray-300 mt-2">
+        <ion-select formControlName="danios" placeholder="Seleccionar los daños" label="Daños"
+          class="dark:text-gray-300" [(ngModel)]="danioSeleccionados.idDanio" (ionChange)="onSelectDanio($event)">
+          <ion-select-option *ngFor="let d of danios" [value]="d.idDanio">{{
+            d.nombre
+            }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="zonaSeleccionada" class="flex flex-col md:flex-row md:items-center mt-4 dark:text-gray-300">
+        <ion-label class="md:w-1/3 text-gray-900 dark:text-gray-300">Pieza</ion-label>
+        <ion-select class="md:w-2/3 text-gray-900 dark:text-gray-300" [(ngModel)]="piezaSeleccionada"
+          (ionChange)="cargarImagenPieza()" interface="popover">
+          <ion-select-option *ngFor="let pieza of piezas[subzonaSeleccionada]" [value]="pieza"
+            class="text-gray-900 dark:text-gray-300">{{ pieza }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <div *ngIf="piezaSeleccionada" class="canvas-container mt-6">
+      <canvas #canvasPieza class="w-300 h-300 border border-gray-300 rounded-lg shadow-md dark:border-gray-700"
+        (click)="seleccionarAreaDano($event)"></canvas>
+    </div>
+
+    <div *ngIf="areaAfectada" class="mt-4 p-2 bg-white rounded shadow-md dark:bg-gray-800">
+      <p class="text-gray-700 dark:text-gray-300">
+        Área afectada: {{ areaAfectada }}
+      </p>
+    </div>
     
+    <ion-button id="agregar_detalles" class="mt-6 bg-blue-600 text-white disabled:opacity-50 dark:bg-blue-500 dark:text-white" (click)="addDetalles()">
+      Agregar detalles
+    </ion-button>
 
-    <ion-item *ngIf="zonaSeleccionada" class="flex flex-col md:flex-row md:items-center mt-4 dark:text-gray-300">
-      <ion-label class="md:w-1/3 text-gray-900 dark:text-gray-300">Pieza</ion-label>
-      <ion-select
-        class="md:w-2/3 text-gray-900 dark:text-gray-300"
-        [(ngModel)]="piezaSeleccionada"
-        (ionChange)="cargarImagenPieza()"
-        interface="popover">
-        <ion-select-option *ngFor="let pieza of piezas[subzonaSeleccionada]" [value]="pieza" class="text-gray-900 dark:text-gray-300">{{ pieza }}</ion-select-option>
-      </ion-select>
-    </ion-item>
-  </ion-list>
+    <ion-button expand="block" class="mt-6 bg-blue-600 text-white disabled:opacity-50 dark:bg-blue-500 dark:text-white"
+      (click)="guardarDano()" [disabled]="
+        !zonaSeleccionada ||
+        !subzonaSeleccionada ||
+        !piezaSeleccionada ||
+        !areaAfectada
+      ">
+      Guardar Daño
+    </ion-button>
+  </form>
 
-  <div *ngIf="piezaSeleccionada" class="canvas-container mt-6">
-    <canvas
-      #canvasPieza
-      class="w-300 h-300 border border-gray-300 rounded-lg shadow-md dark:border-gray-700"
-      (click)="seleccionarAreaDano($event)"
-    ></canvas>
-  </div>
+  <ion-toast trigger="agregar_detalles" message="Has agregado el detalle correctamente" [duration]="2000"></ion-toast>
 
-  <div *ngIf="areaAfectada" class="mt-4 p-2 bg-white rounded shadow-md dark:bg-gray-800">
-    <p class="text-gray-700 dark:text-gray-300">Área afectada: {{ areaAfectada }}</p>
-  </div>
-
-  <ion-button
-    expand="block"
-    class="mt-6 bg-blue-600 text-white disabled:opacity-50 dark:bg-blue-500 dark:text-white"
-    (click)="guardarDano()"
-    [disabled]="!zonaSeleccionada || !subzonaSeleccionada || !piezaSeleccionada || !areaAfectada"
-  >
-    Guardar Daño
-  </ion-button>
 </ion-content>
