@@ -3,19 +3,14 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
-  FormControl,
 } from '@angular/forms';
 import { DataService } from 'src/app/shared/services/data.service';
 import { PhotoService } from '../../../shared/services/photo.service';
 import {
   AlertController,
   NavController,
-  RangeCustomEvent,
-  SelectChangeEventDetail,
-  SelectCustomEvent,
 } from '@ionic/angular';
 import { InformeCompletoService } from 'src/app/shared/services/InformeCompletoService.service';
-import { VehiculoPorPlacasServiceService } from '../../../shared/services/vehiculoPorPlacasService.service';
 import {
   IClasevehiculo,
   IMarca,
@@ -23,7 +18,6 @@ import {
   InformeCompletoResponse,
   ITipovehiculo,
 } from 'src/app/shared/common/DTO/EntidadesInforme';
-import { IonSelectCustomEvent } from '@ionic/core';
 
 @Component({
   selector: 'app-seg3',

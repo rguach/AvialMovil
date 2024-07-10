@@ -30,4 +30,8 @@ export class SegmentsPage  {
     this.router.navigate(['/segments/seg6']);
   }
 
+  seg7(){
+    this.router.navigate(['/segments/seg7']);
+  }
+
 }

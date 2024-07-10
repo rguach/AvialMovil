@@ -1,14 +1,46 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ModalController, SelectCustomEvent } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
+import { ICategoriaparte, IDanio, IDivisionparte, ITipoparte } from 'src/app/shared/common/DTO/EntidadesInforme';
+import { DaniosService } from 'src/app/shared/services/danios/danios.service';
 
 @Component({
   selector: 'app-modal-danos',
   templateUrl: './modal-danos.component.html',
   styleUrls: ['./modal-danos.component.css'],
+  providers:[DaniosService]
 })
-export class ModalDanosComponent  {
+export class ModalDanosComponent implements OnInit {
   @ViewChild('canvasPieza', { static: false }) canvasPieza!: ElementRef;
+
+  
+  tipoPartes: ITipoparte[]=[];
+  categoriaPartes: ICategoriaparte[] = [];
+  divisionPartes: IDivisionparte[] = [];
+  danios: IDanio []=[]
+
+
+  daniosSeleccionados: IDanio[] =[];
+
+  tipoParteSelected: ITipoparte ={
+    idTipoParte: 0,
+    idAdjuntos: 0,
+    idCategoriaParte: 0,
+    idDivisionParte: 0,
+    nombre: ''
+  }
+  categoriaParteSelected : ICategoriaparte = {
+    idCategoriaParte: 0,
+    nombre: ''
+  }
+  divisionParteSelected: IDivisionparte={
+    idDivisionParte: 0,
+    nombre: '',
+    filas: 0,
+    columnas: 0
+  }
+  
 
   zonas: string[] = ['Zona Exterior', 'Zona Interior', 'Chasis', 'Sistemas Integrales del Vehiculo'];
   subzona: { [key: string]: string[] } = {
@@ -41,6 +73,8 @@ export class ModalDanosComponent  {
     'Otros': ['Otros']
   };
 
+  formDanios:FormGroup;
+
   zonaSeleccionada: string ='';
   subzonaSeleccionada: string = '';
   piezaSeleccionada: string = '';
@@ -48,9 +82,74 @@ export class ModalDanosComponent  {
 
   constructor(
     private modalController: ModalController,
-    private alertController: AlertController
-  ) { }
+    private alertController: AlertController,
+    private daniosService: DaniosService,
+    private formBuilder: FormBuilder,
+  ) {
+    this.formDanios = this.formBuilder.group({
+      tipoParte: ['', Validators.required],
+      categoriaParte: ['', Validators.required],
+      divisionParte: ['', Validators.required],
+      // zona: ['', Validators.required],
+      // subzona: ['', Validators.required],
+      pieza: ['', Validators.required],
+      danios: [[]]
+    });
+  }
+
+  async ngOnInit(){
+    const tipoParteResponse = await this.daniosService.getTipoPartes();
+    if(!tipoParteResponse.isSuccess){
+      console.log("Error",tipoParteResponse);
+    }
+    this.tipoPartes = tipoParteResponse.data;
+
+    const daniosResponse = await this.daniosService.getDanios();
+    if(!daniosResponse.isSuccess){
+      console.log("Error",daniosResponse);
+    }
+    this.danios = daniosResponse.data;
+  }
+
+  //#region Events on select
+  async onSelectTipoParte(event: SelectCustomEvent){
+    const selectedTipoParteId= event.detail.value;
+    this.tipoParteSelected = this.tipoPartes.find((item) => item.idTipoParte === selectedTipoParteId) || this.tipoParteSelected;
+    console.log(this.tipoParteSelected);
+
+
+    const categoriaParteResponse = await this.daniosService.getCategoria(this.tipoParteSelected.idCategoriaParte);
+    if(!categoriaParteResponse.isSuccess){
+      console.log("Error",categoriaParteResponse);
+    }
+    this.categoriaPartes = categoriaParteResponse.data;
+
+    const divisionParte = await this.daniosService.getDivisionPartes(this.tipoParteSelected.idDivisionParte);
+    if(!divisionParte.isSuccess){
+      console.log("Error",divisionParte);
+    }
+    this.divisionPartes = divisionParte.data;
+
+    if (this.categoriaPartes.length === 1) {
+      this.formDanios.patchValue({ categoriaParte: this.categoriaPartes[0].idCategoriaParte });
+    }
+    if (this.divisionPartes.length === 1) {
+      this.formDanios.patchValue({ divisionParte: this.divisionPartes[0].idDivisionParte });
+    }
+  }
+
+  //#endregion
   
+  //#region HELPERS
+  isTipoParteEmpty(tipoParte: ITipoparte): boolean {
+    return tipoParte.idTipoParte === 0 && 
+           tipoParte.idAdjuntos === 0 && 
+           tipoParte.idCategoriaParte === 0 && 
+           tipoParte.idDivisionParte === 0 && 
+           tipoParte.nombre === '';
+  }
+  
+  //#endregion
   cargarSubzonas() {
     // Se llama cuando se selecciona una zona
     this.subzonaSeleccionada = '';
@@ -113,9 +212,6 @@ export class ModalDanosComponent  {
     ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
     ctx.stroke();
   }
-  
-  
-
   seleccionarAreaDano(event: MouseEvent) {
     const canvas = this.canvasPieza.nativeElement;
     const rect = canvas.getBoundingClientRect();

@@ -18,6 +18,23 @@ export const RutasBackend = {
     patiosRetencion:{
         get:"/api/Patioretencions/Get"
     },
+    tipoPartes:{
+        get:"/api/Tipopartes/GetTipoPartes"
+    },
+
+    divisionPartes:{
+        get:"/api/Divisionpartes/GetDivisionpartes"
+    },
+    ubicaciones:{
+        get:"/api/Ubicaciones/Get"
+    },
+    categoriaPartes:{
+        get:"/api/Categoriapartes/GetCategoriapartes"
+    },
+    danios:{
+        get:"/api/Danios/Get"
+    }
+    
 
     
 }
