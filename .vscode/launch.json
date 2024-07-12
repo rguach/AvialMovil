@@ -1,0 +1,37 @@
+{
+    // Use IntelliSense para saber los atributos posibles.
+    // Mantenga el puntero para ver las descripciones de los existentes atributos.
+    // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug on Browser",
+            "type": "cordova",
+            "request": "launch",
+            "platform": "browser",
+            "target": "chrome",
+            "simulatePort": 8100,
+            "livereload": true,
+            "cwd": "${workspaceFolder}",
+            "sourceMaps": true
+        },
+        {
+            "name": "Simulate Android in browser",
+            "type": "cordova",
+            "request": "launch",
+            "platform": "android",
+            "target": "chrome",
+            "simulatePort": 8000,
+            "livereload": true,
+            "cwd": "${workspaceFolder}",
+            "sourceMaps": true
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Iniciar Chrome para localhost",
+            "url": "http://localhost:8100",
+            "webRoot": "${workspaceFolder}"
+        }
+    ]
+}

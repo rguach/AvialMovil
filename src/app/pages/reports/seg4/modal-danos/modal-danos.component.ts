@@ -28,6 +28,9 @@ export class ModalDanosComponent implements OnInit {
 
   detallesDanio: IDetallesDTO[] = [];
 
+  subzonasDisponibles: string[] = [];
+  piezasDisponibles: string[] = [];
+
   danioSeleccionados: IDanio = {
     idDanio: 0,
     descripcion: '',
@@ -58,19 +61,20 @@ export class ModalDanosComponent implements OnInit {
     'Chasis',
     'Sistemas Integrales del Vehiculo',
   ];
-  subzona: { [key: string]: string[] } = {
+
+  subzonas: { [key: string]: string[] } = {
     'Zona Exterior': [
       'Parte Frontal',
       'Lateral Derecho',
       'Parte Posterior',
-      'Lateral Derecho',
+      'Lateral Izquierdo',
       'Techo',
     ],
     'Zona Interior': ['Cabina'],
     Chasis: ['Monocasco/Independiente'],
     'Sistemas Integrales del Vehiculo': [
       'Motor',
-      ' Sistema de Propulsion',
+      'Sistema de Propulsion',
       'Sistema de Traccion',
       'Sistema de Suspension',
       'Sistema de Direccion',
@@ -79,10 +83,11 @@ export class ModalDanosComponent implements OnInit {
       'Sistema Electronico',
       'Sistema de Alumbrado',
       'Sistema de Refrigeracion',
-      'Sistema de Alimentacion y Escaoe',
+      'Sistema de Alimentacion y Escape',
       'Otros',
     ],
   };
+
   piezas: { [key: string]: string[] } = {
     'Parte Frontal': [
       'Parachoque',
@@ -224,17 +229,30 @@ export class ModalDanosComponent implements OnInit {
       console.log('Error', daniosResponse);
     }
     this.danios = daniosResponse.data;
+
+    this.formDanios.get('pieza')?.valueChanges.subscribe((value) => {
+      this.piezaSeleccionada = value;
+      if (value) {
+        this.cargarImagenPieza();
+      }
+    });
   }
 
   async cotizarDatos() {
     const datos: ICalcularDañosDTO = {
       danios: this.detallesDanio,
-      modelo: '',
-      anioVehiculo: 0,
+      modelo: 'Chevrolet aveo',
+      anioVehiculo: 2015,
     };
 
-    const response = await this.daniosService.cotizarDaños(datos);
-    console.log(response.data);
+    try {
+      const response = await this.daniosService.cotizarDaños(datos);
+      console.log(response.data);
+      // Handle the response data as needed
+    } catch (error) {
+      console.error('Error al cotizar daños:', error);
+      // Handle the error (e.g., show an error message to the user)
+    }
   }
 
   addDetalles() {
@@ -245,8 +263,56 @@ export class ModalDanosComponent implements OnInit {
     });
     this.formDanios.patchValue({ danios: this.detallesDanio });
     console.log(this.detallesDanio);
-  }
 
+    // Limpiar los inputs
+    this.formDanios.patchValue({
+      tipoParte: '',
+      categoriaParte: '',
+      divisionParte: '',
+      danios: [],
+    });
+
+    // Reiniciar las selecciones
+    this.tipoParteSelected = {
+      idTipoParte: 0,
+      idAdjuntos: 0,
+      idCategoriaParte: 0,
+      idDivisionParte: 0,
+      nombre: '',
+    };
+    this.categoriaParteSelected = {
+      idCategoriaParte: 0,
+      nombre: '',
+    };
+    this.divisionParteSelected = {
+      idDivisionParte: 0,
+      nombre: '',
+      filas: 0,
+      columnas: 0,
+    };
+    this.danioSeleccionados = {
+      idDanio: 0,
+      descripcion: '',
+      nombre: '',
+    };
+
+    // Limpiar las listas dependientes
+    this.categoriaPartes = [];
+    this.divisionPartes = [];
+
+    // Limpiar las selecciones de zona, subzona y pieza
+    this.zonaSeleccionada = '';
+    this.subzonaSeleccionada = '';
+    this.piezaSeleccionada = '';
+    this.areaAfectada = '';
+
+    // Limpiar el canvas si es necesario
+    if (this.canvasPieza) {
+      const canvas = this.canvasPieza.nativeElement;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
   //#region Events on select ----------------------
   async onSelectTipoParte(event: SelectCustomEvent) {
     const selectedTipoParteId = event.detail.value;
@@ -284,12 +350,12 @@ export class ModalDanosComponent implements OnInit {
     }
   }
 
-
   onSelectDivisionParte(event: SelectCustomEvent) {
     const selectedTipoParteId = event.detail.value;
     this.tipoParteSelected =
-      this.tipoPartes.find((item) => item.idTipoParte === selectedTipoParteId) ||
-      this.tipoParteSelected;
+      this.tipoPartes.find(
+        (item) => item.idTipoParte === selectedTipoParteId
+      ) || this.tipoParteSelected;
   }
 
   onSelectDanio(event: SelectCustomEvent) {
@@ -317,20 +383,40 @@ export class ModalDanosComponent implements OnInit {
   //#region  Cargar datos -------------
 
   cargarSubzonas() {
-    // Se llama cuando se selecciona una zona
-    this.subzonaSeleccionada = '';
-    this.piezaSeleccionada = '';
+    console.log('Cargando subzonas');
+    this.zonaSeleccionada = this.formDanios.get('zona')?.value;
+    console.log('zona seleccionada', this.zonaSeleccionada);
+    if (this.zonaSeleccionada) {
+      this.subzonasDisponibles = this.subzonas[this.zonaSeleccionada] || [];
+      this.formDanios.patchValue({ subzona: '' });
+      this.formDanios.patchValue({ pieza: '' });
+      this.subzonaSeleccionada = '';
+      this.piezaSeleccionada = '';
+      this.piezasDisponibles = [];
+      console.log(this.subzonasDisponibles);
+    } else {
+      this.subzonasDisponibles = [];
+    }
     this.areaAfectada = '';
   }
 
   cargarPiezas() {
-    // Se llama cuando se selecciona una zona
-    this.piezaSeleccionada = '';
+    console.log('Cargando piezas');
+    this.subzonaSeleccionada = this.formDanios.get('subzona')?.value;
+    console.log('subzona seleccionada', this.subzonaSeleccionada);
+    if (this.subzonaSeleccionada) {
+      this.piezasDisponibles = this.piezas[this.subzonaSeleccionada] || [];
+      this.formDanios.patchValue({ pieza: '' });
+      this.piezaSeleccionada = '';
+      console.log(this.piezasDisponibles);
+    } else {
+      this.piezasDisponibles = [];
+    }
     this.areaAfectada = '';
   }
 
   cargarImagenPieza() {
-    // Se llama cuando se selecciona una pieza
+    console.log('Cargando imagen de la pieza:', this.piezaSeleccionada);
     this.areaAfectada = '';
     if (this.canvasPieza) {
       const canvas = this.canvasPieza.nativeElement;
@@ -342,15 +428,29 @@ export class ModalDanosComponent implements OnInit {
       // Dibujar la cuadrícula
       this.dibujarCuadricula(ctx, canvas.width, canvas.height);
 
-      // Aquí podrías cargar y dibujar la imagen de la pieza
-      // Por ejemplo:
-      // const img = new Image();
-      // img.onload = () => {
-      //   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      // };
-      // img.src = `assets/images/${this.zonaSeleccionada}/${this.piezaSeleccionada}.png`;
+      // Aquí podrías cargar y dibujar la imagen de la pieza si la tienes
     }
+    // Se llama cuando se selecciona una pieza
+    // this.areaAfectada = '';
+    // if (this.canvasPieza) {
+    //   const canvas = this.canvasPieza.nativeElement;
+    //   const ctx = canvas.getContext('2d');
+
+    //   // Limpiar el canvas
+    //   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    //   // Dibujar la cuadrícula
+    //   this.dibujarCuadricula(ctx, canvas.width, canvas.height);
+
+    // Aquí podrías cargar y dibujar la imagen de la pieza
+    // Por ejemplo:
+    // const img = new Image();
+    // img.onload = () => {
+    //   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    // };
+    // img.src = `assets/images/${this.zonaSeleccionada}/${this.piezaSeleccionada}.png`;
   }
+
   //#endregion
 
   dibujarCuadricula(

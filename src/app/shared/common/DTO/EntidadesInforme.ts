@@ -185,6 +185,19 @@ export interface ICalcularDañosDTO{
   modelo:string,
   anioVehiculo:number
 }
+export interface ConsultaPresupuestoResponse {
+  presupuestoTotal: number;
+  detalles: DetalleReparacion[];
+  fechaConsulta: string;
+}
+
+export interface DetalleReparacion {
+  danio: string;
+  descripcion: string;
+  tipoParte: string;
+  ubicacion: string;
+  costo: number;
+}
 export interface InformeCompletoResponse {
   patiosRetencion: IPatioretencion[];
   marcas: IMarca[];

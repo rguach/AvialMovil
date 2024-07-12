@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import axios, { AxiosResponse } from 'axios';
 import { ResponseBackend } from '../../common/DTO/Response';
-import {  ICalcularDañosDTO, ICategoriaparte, IDanio, IDivisionparte, ITipoparte, IUbicacion } from '../../common/DTO/EntidadesInforme';
+import {  ConsultaPresupuestoResponse, ICalcularDañosDTO, ICategoriaparte, IDanio, IDivisionparte, ITipoparte, IUbicacion } from '../../common/DTO/EntidadesInforme';
 import { environment } from 'src/environments/environment';
 import { RutasBackend } from '../../common/helpers/RutasBackend';
 
@@ -61,15 +61,19 @@ export class DaniosService {
     return response.data
   }
 
-  async cotizarDaños(detalles: ICalcularDañosDTO): Promise<ResponseBackend<ICalcularDañosDTO>> {
+  async cotizarDaños(detalles: ICalcularDañosDTO): Promise<ResponseBackend<ConsultaPresupuestoResponse>> {
     const data = {
-      danios: detalles,
-      modelo: '', // Agregar si es necesario
-      anioVehiculo: 0 // Agregar si es necesario
+      danios: detalles.danios.map(d => ({
+        tipoParte: d.tipoParte,
+        ubicacion: d.ubicacion,
+        danio: d.danio
+      })),
+      modelo: detalles.modelo,
+      anioVehiculo: detalles.anioVehiculo
     };
 
     try {
-      const response: AxiosResponse<ResponseBackend<ICalcularDañosDTO>> = await axios.post(
+      const response: AxiosResponse<ResponseBackend<ConsultaPresupuestoResponse>> = await axios.post(
         `${environment.baseUrl}${RutasBackend.informeCopmpleto.post}`,
         data
       );

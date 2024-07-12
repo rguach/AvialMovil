@@ -239,6 +239,7 @@ export class ExploreSegmentsComponent implements OnInit {
       // Fecha actual en palabras (día, mes y año)
       const fechaActual = moment().format('DD [de] MMMM [de] YYYY').toUpperCase();
 
+      const fotoBase64 = this.getImageForPdf(foto2)
     // Contenido principal
     autoTable(doc, {
       head: [
@@ -586,7 +587,7 @@ export class ExploreSegmentsComponent implements OnInit {
         ],
         [
           {
-            content: foto2,
+            content: doc.addImage(await fotoBase64,"JPEG",1,1,200,200),
             colSpan: 2,
             styles: { cellWidth: 80, minCellHeight: 60 }
           },
